@@ -4,6 +4,10 @@ metadata:
   name: jib-maven
 spec:
   steps:
+  - name: config
+    image: ubuntu
+    command: ["/bin/bash"]
+    args: ["-c", "cat $HOME/.docker/config.json"]
   - name: build-and-push
     image: gcr.io/cloud-builders/mvn
-    args: ['-X', 'compile', 'jib:build']
+    args: ['-Duser.home=$HOME', '-X', 'compile', 'jib:build']
