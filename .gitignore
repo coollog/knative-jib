@@ -23,3 +23,10 @@
 /dist/
 /nbdist/
 /.nb-gradle/
+
+# Secret
+docker-secret.yaml
+
+# Build log tool
+# go get -u github.com/knative/build/cmd/logs
+logs

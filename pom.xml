@@ -45,7 +45,8 @@
 				<version>0.9.8</version>
 				<configuration>
 					<to>
-						<image>coollog/helloworld-java</image>
+						<!--<image>coollog/helloworld-java</image>-->
+						<image>gcr.io/qingyangc-sandbox/knative</image>
 					</to>
 				</configuration>
 			</plugin>
