@@ -10,4 +10,5 @@ spec:
     args: ["-c", "cat $HOME/.docker/config.json"]
   - name: build-and-push
     image: gcr.io/cloud-builders/mvn
-    args: ['-Duser.home=$HOME', '-X', 'compile', 'jib:build']
+    args: ['test']
+    # args: ['-Duser.home=$HOME', '-X', 'compile', 'jib:build']
