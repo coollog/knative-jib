@@ -10,3 +10,6 @@ spec:
       revision: master
   template:
     name: jib-maven
+    arguments:
+    - name: IMAGE
+      value: coollog/helloworld-java

@@ -3,12 +3,16 @@ kind: BuildTemplate
 metadata:
   name: jib-maven
 spec:
+  parameters:
+  - name: IMAGE
+    description: The name of the image to push
+
   steps:
-  - name: config
-    image: ubuntu
-    command: ["/bin/bash"]
-    args: ["-c", "cat $HOME/.docker/config.json"]
   - name: build-and-push
     image: gcr.io/cloud-builders/mvn
-    args: ['test']
-    # args: ['-Duser.home=$HOME', '-X', 'compile', 'jib:build']
+    args: 
+    - -Duser.home=/builder/home
+    - -X
+    - compile
+    - jib:build
+    - -Dimage=${IMAGE}
