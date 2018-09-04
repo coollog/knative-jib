@@ -9,7 +9,7 @@ spec:
       revisionTemplate:
         spec:
           container:
-            image: docker.io/coollog/helloworld-java
+            image: docker.io/coollog/helloworld-jib
             env:
             - name: TARGET
-              value: "Spring Boot Sample v1"
+              value: "Spring Boot Sample v2"
