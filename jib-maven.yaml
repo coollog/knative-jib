@@ -22,7 +22,7 @@ spec:
     - compile
     - jib:build
     - -Dimage=${IMAGE}
-    workingDir: /workspace/${DIRECTORY}
+    workingDir: ${DIRECTORY}
     volumeMounts:
     - name: ${CACHE}
       mountPath: /builder/home/.m2
