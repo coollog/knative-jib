@@ -26,6 +26,7 @@ spec:
     volumeMounts:
     - name: ${CACHE}
       mountPath: /builder/home/.m2
+      subPath: m2
     - name: ${CACHE}
       mountPath: /builder/home/.cache
       subPath: jib
