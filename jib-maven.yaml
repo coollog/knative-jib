@@ -8,15 +8,28 @@ spec:
     description: The name of the image to push
   - name: DIRECTORY
     description: The directory containing the app, relative to the source repository root
-    default: "" 
+    default: .
+  - name: CACHE
+    description: The name of the volume for the .m2 cache
+    default: empty-dir-volume
 
   steps:
   - name: build-and-push
     image: gcr.io/cloud-builders/mvn
-    args: 
+    args:
     - -Duser.home=/builder/home
     - -X
     - compile
     - jib:build
     - -Dimage=${IMAGE}
     workingDir: /workspace/${DIRECTORY}
+    volumeMounts:
+    - name: ${CACHE}
+      mountPath: /builder/home/.m2
+    - name: ${CACHE}
+      mountPath: /builder/home/.cache
+      subPath: jib
+
+  volumes:
+  - name: empty-dir-volume
+    emptyDir: {}

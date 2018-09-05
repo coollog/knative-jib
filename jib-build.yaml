@@ -13,3 +13,22 @@ spec:
     arguments:
     - name: IMAGE
       value: coollog/helloworld-jib
+    - name: CACHE
+      value: persistent-cache
+
+  volumes:
+  - name: persistent-cache
+    persistentVolumeClaim:
+      claimName: cache
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: cache
+spec:
+  accessModes:
+    - ReadWriteOnce
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 8Gi
