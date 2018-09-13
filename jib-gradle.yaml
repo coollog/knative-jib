@@ -3,7 +3,69 @@ kind: BuildTemplate
 metadata:
   name: jib-gradle
 spec:
+  parameters:
+  - name: IMAGE
+    description: The name of the image to push
+  - name: DIRECTORY
+    description: The directory containing the app, relative to the source repository root
+    default: .
+  - name: CACHE
+    description: The name of the volume for caching Maven artifacts and base image layers
+    default: empty-dir-volume
+
   steps:
+  # Creates a Gradle init script that applies Jib to any Gradle project.
+  - name: create-init-script
+    image: busybox
+    args:
+    - sh
+    - -c
+    - |
+      echo "\
+      initscript {
+        repositories {
+          maven {
+            url 'https://plugins.gradle.org/m2'
+          }
+        }
+        dependencies {
+          classpath 'gradle.plugin.com.google.cloud.tools:jib-gradle-plugin:+'
+        }
+      }
+
+      // we just apply the jib plugin on the project if it does not already exist.
+      rootProject {
+        afterEvaluate {
+          if (!project.plugins.hasPlugin('com.google.cloud.tools.jib')) {
+            project.apply plugin: com.google.cloud.tools.jib.gradle.JibPlugin
+          }
+        }
+      }\
+      " > /init-script/auto-jib.gradle
+    volumeMounts:
+    - name: init-script
+      mountPath: /init-script
+
   - name: build-and-push
     image: gcr.io/cloud-builders/gradle
-    args: ['jib']
+    args:
+    - --init-script=/init-script/auto-jib.gradle
+    - jib
+    - -Duser.home=/builder/home
+    - --image=${IMAGE}
+    workingDir: /workspace/${DIRECTORY}
+    volumeMounts:
+    - name: ${CACHE}
+      mountPath: /builder/home/.m2
+      subPath: m2-cache
+    - name: ${CACHE}
+      mountPath: /builder/home/.cache
+      subPath: jib-cache
+    - name: init-script
+      mountPath: /init-script
+
+  volumes:
+  - name: empty-dir-volume
+    emptyDir: {}
+  - name: init-script
+    emptyDir: {}

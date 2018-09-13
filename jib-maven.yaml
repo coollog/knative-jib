@@ -8,7 +8,7 @@ spec:
     description: The name of the image to push
   - name: DIRECTORY
     description: The directory containing the app, relative to the source repository root
-    default: /workspace
+    default: .
   - name: CACHE
     description: The name of the volume for the .m2 cache
     default: empty-dir-volume
@@ -22,7 +22,7 @@ spec:
     - compile
     - com.google.cloud.tools:jib-maven-plugin:build
     - -Dimage=${IMAGE}
-    workingDir: ${DIRECTORY}
+    workingDir: /workspace/${DIRECTORY}
     volumeMounts:
     - name: ${CACHE}
       mountPath: /builder/home/.m2
@@ -30,6 +30,9 @@ spec:
     - name: ${CACHE}
       mountPath: /builder/home/.cache
       subPath: jib
+    - name: ${CACHE}
+      mountPath: /workspace/${DIRECTORY}/target
+      subPath: maven-build-output
 
   volumes:
   - name: empty-dir-volume
