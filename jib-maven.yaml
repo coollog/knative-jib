@@ -12,6 +12,9 @@ spec:
   - name: CACHE
     description: The name of the volume for the .m2 cache
     default: empty-dir-volume
+  - name: VERSION
+    description: The jib-maven-plugin version
+    default: ""
 
   steps:
   - name: build-and-push
@@ -20,7 +23,7 @@ spec:
     - -Duser.home=/builder/home
     - -X
     - compile
-    - com.google.cloud.tools:jib-maven-plugin:build
+    - com.google.cloud.tools:jib-maven-plugin:${VERSION}:build
     - -Dimage=${IMAGE}
     workingDir: /workspace/${DIRECTORY}
     volumeMounts:

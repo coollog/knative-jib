@@ -1,18 +1,18 @@
 apiVersion: build.knative.dev/v1alpha1
 kind: Build
 metadata:
-  name: jib-gradle-build
+  name: jib-maven-build
 spec:
-  serviceAccountName: build-bot
+  serviceAccountName: riff-build
   source:
     git:
       url: https://github.com/coollog/knative-jib
       revision: master
   template:
-    name: jib-gradle
+    name: jib-maven
     arguments:
     - name: IMAGE
-      value: coollog/helloworld-jib:gradle
+      value: coollog/helloworld-jib:maven
     - name: CACHE
       value: persistent-cache
     - name: DIRECTORY
